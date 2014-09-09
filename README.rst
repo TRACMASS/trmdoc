@@ -6,21 +6,20 @@ Installation:
 
 (It is advised that you use virtual environments: http://virtualenvwrapper.readthedocs.org/en/latest/)
 
-```
-# (Download or clone the repo)
-cd trmdoc
-pip --user -r requirements.txt
-# or with virtualenvwrapper
-mkvirtualenv trmdoc
-pip -r requirements.txt
-```
+.. code-block:: bash
+
+  # (Download or clone the repo)
+  cd trmdoc
+  pip --user -r requirements.txt
+  # or with virtualenvwrapper
+  mkvirtualenv trmdoc
+  pip -r requirements.txt
 
 The documentation is in the *source* folder. Read more about the syntax here: http://sphinx-doc.org/rest.html
 
-Compile the web pages with
-
-```
-make html
-```
+Compile the web pages with::
+  
+  make html
 
 The resulting html files are generated in the *build/html* folder.
+
