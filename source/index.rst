@@ -12,16 +12,11 @@ general circulation models.
 The code makes it possible to estimate water paths, Lagrangian stream functions (barotropic and overturning),
 exchange times, particle sedimentation, etc. 
 TRACMASS has been used in studies of the global ocean circulation as well as of coastal regions. 
-The code is written in FORTRAN 90 and runs on UNIX platforms such as MAC OS X and
-Linux. The TRACMASS trajectory scheme works on structured grids with curvilinear 
-coordinates. 
-Most types of vertical coordintes such as z, z-star and 
-sigma coordinates for ocean models and pressure, sigma and hybrid 
-coordinates for atmospheric models.
-
-velocity fields from
-ocean general circulation models such as NEMO, ORCA, ROMS, HYCOM,
-IFS-ECMWF, MOM, HYCOM, MITGCM, ECCO, and EC-Earth.
+The code is written in FORTRAN 90 and runs on UNIX platforms such as MAC OS X and Linux. 
+The TRACMASS trajectory scheme works on structured grids with curvilinear coordinates. 
+It handles most types of vertical coordintes such as z, z-star and sigma coordinates for ocean models and pressure, 
+sigma and hybrid coordinates for atmospheric models.
+It is currently set up for ocean general circulation models such as NEMO, ORCA, MOM, ROMS, MITGCM, ECCO and HYCOM and the atmopsheric general circulation model IFS (IFS-ECMWF and EC-Earth).
 
 
 Quickstart
