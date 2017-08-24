@@ -13,7 +13,7 @@ water paths, Lagrangian stream functions (barotropic and overturning),
 exchange times, particle sedimentation, etc. TRACMASS has been used in
 studies of the global ocean circulation, of sea circulation in The
 Baltic, The Mediterranean and in coastal regions. The code is written
-in FORTRAN 95 and runs on UNIX platforms such as MAC OS X and
+in FORTRAN 90 and runs on UNIX platforms such as MAC OS X and
 Linux. TRACMASS has been set up to run with velocity fields from
 general circulation models such as NEMO, ORCA, ROMS, POM, MICOM,
 IFS-ECMWF, MOM, HYCOM, MITGCM, ECCO, and EC-Earth.
