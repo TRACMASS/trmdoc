@@ -9,15 +9,18 @@ project, that defines default behaviour, and one for each case where
 special settings are included.
 
 
-Version number of the namelist (INITGRIDVER)
---------------------------------------------
+Version number of the namelist
+------------------------------
+*INIT_NAMELIST_VERSION*
 
  .. option:: gridVerNum
 
-    Check if the namelist file has the correct syntax
+    Version number of the namelist. This is used to check if the
+    namelist file has the correct syntax
 
-Description of the velocity fields (INITGRIDDESC)
--------------------------------------------------
+Description of the velocity fields
+----------------------------------
+*INIT_GRID_DESCRIPTION*
 
  .. option:: GCMname
 
@@ -29,7 +32,7 @@ Description of the velocity fields (INITGRIDDESC)
 
  .. option:: gridName
 
-    Name of the spcific run/grid used to generate velocity fields
+    Name of the specific run/grid used to generate velocity fields
 
  .. option:: gridSource
 
@@ -47,8 +50,9 @@ Description of the velocity fields (INITGRIDDESC)
 
 
 
-Description of the current case (INITRUNDESC)
----------------------------------------------
+Description of the current case
+-------------------------------
+*INIT_CASE_DESCRIPTION*
 
  .. option:: caseName
              
@@ -59,30 +63,28 @@ Description of the current case (INITRUNDESC)
     Longer desscriptions of the current case
 
 
-Size of the full grid (INITGRIDGRID)
-------------------------------------
- 
- .. option:: IMT
+Shape of the grid
+-----------------
+*INIT_GRID_SIZE*
+
+ .. option:: imt
 
     Number of gridcells in x or zonal (longitude) direction
 
- .. option:: JMT
+ .. option:: jmt
 
     Number of gridcells in y or meridional (latitude) direction
 
- .. option:: KM
+ .. option:: km
 
     Number of gridcells in z (depth) direction
 
+ .. option:: nst
 
- .. option:: NEND
-
-    NEND is LBT +1
+    Number of velocity fields in memory simultaneously. Defaults to 2
+    but can can be used to have for example a full climatology in 
+    memory to speed up the run.
  
-
-Part of the grid to use (INITRUNGRID)
--------------------------------------
-
  .. option:: subGrid:
 
     Select how to define the grid used by TRACMASS::
@@ -94,29 +96,17 @@ Part of the grid to use (INITRUNGRID)
   
 If SubGrid is 1:
  
- .. option:: subGridImin
+ .. option:: subGridImin, subGridImax
 
-    Min i-position
+    Min / Max i-position
 
- .. option:: subGridImax
+ .. option:: subGridJmin, subGridJmax
 
-    Max i-position
+    Min / Max j-position
 
- .. option:: subGridJmin
+ .. option:: subGridKmin, subGridKmax
 
-    Min j-position
-
- .. option:: subGridJmax
-
-    Max j-position
-
- .. option:: subGridKmin
-
-    Min k-position (direction as defined by input file)
-
- .. option:: subGridKmax
-
-    Min k-position (direction as defined by input file)
+    Min / Max k-position (direction as defined by input file)
 
 If SubGrid is 2 or 3:
 
@@ -132,8 +122,10 @@ If SubGrid is 2:
 
 
 
-Base times to calculate Julian Dates (INITGRIDDATE)
----------------------------------------------------
+Base times to calculate Julian Dates
+------------------------------------
+*INIT_BASE_TIME*
+
 These settings are used to calculate julian dates. Default is set for
 how pylab/numpy defines JD's, but can be changed if you prefer for
 example matlab's standard (baseYear=0) or Astronomical julian dates
@@ -164,8 +156,9 @@ example matlab's standard (baseYear=0) or Astronomical julian dates
     Reference year (default = 1)
 
 
-Time settings for the velocity fields (INITGRIDTIME)
-----------------------------------------------------
+Time settings for the velocity fields
+-------------------------------------
+*INIT_GRID_TIME*
 
  .. option:: fieldsPerFile
     
@@ -185,22 +178,22 @@ Time settings for the velocity fields (INITGRIDTIME)
              
  .. option::  minvelJD
 
-    Set the julian date (defined before) for the first velocity field
-    to be used in the run.
+    Sets the julian date (defined before) for the first velocity field
+    to be used in the run. Set to -1 if not used
 
  .. option::  maxvelJD
 
-    Set the julian date (defined before) for the last velocity field
-    to be used in the run.
+    Sets the julian date (defined before) for the last velocity field
+    to be used in the run. Set to -1 if not used
 
 *intmax*, *minvelJD* and/or *maxvelJD* are used when looping the
 velocity fields to allow for longer runs. *minvelJD* and
 *maxvelJD* can define a subset of the data (e.g. loop over the year 2000 even if data spans from 1950 to 2100.
 
 
-
-Start time for the TRACMASS run (INITRUNDATE)
----------------------------------------------
+Start time for the TRACMASS run
+-------------------------------
+*INIT_START_DATE*
 
  .. option:: startHour
 
@@ -222,12 +215,16 @@ Alternatively
 
  .. option:: startJD
 
-    Start Julian-Date (as defined above) for the run
+    Start Julian-Date (as defined above) for the run. Set to -1 if not used.
 
+Or
+ .. option:: intmin
 
+    Start ints timestep for the run. Set to -1 if not used.
 
-Timeperiod of seeding and advection (INITRUNTIME)
--------------------------------------------------
+Timeperiod of seeding and advection
+-----------------------------------
+*INIT_RUN_TIME*
  
  .. option:: intspin
 
@@ -239,23 +236,19 @@ Timeperiod of seeding and advection (INITRUNTIME)
     Number of timesteps (changes of velocity fields) to advect the 
     particles
 
- .. option:: intstep
-
-    Decide if advecting the particles forward (1) or backwards (-1)
-
 
 .. _INITRUNWRITE:
 
 Writing particle postions
 -------------------------
-*INITRUNWRITE*
+*INIT_WRITE_TRAJS*
 
  .. option:: twritetype
 
     Format of time in output file::
 
-      0 = timesteps since beginning of the run
-      1 = seconds since beginning of the run
+      0 = timesteps since the beginning of the run
+      1 = seconds since the beginning of the run
       2 = Julian date as defined above
 
 
@@ -280,13 +273,10 @@ Writing particle postions
     
     Basename for the output files. This is selected automativally if not set.
 
- .. option:: namep 
-    
-    Name of rerun file.
 
-
-Control how and where particles are seeded (INITRUNSEED)
---------------------------------------------------------
+Control how and where particles are seeded 
+------------------------------------------
+*INIT_SEEDING*
 
  .. option:: nff
     
@@ -323,7 +313,7 @@ Control how and where particles are seeded (INITRUNSEED)
 
  .. option:: partQuant
 
-    Particles seeded in ceach gridcell. Units depends on **nqua**. 
+    Particles seeded in each gridcell. Units depends on **nqua**. 
     *1*: particles / gridcell, *2*: $m_3 s^{-1}$. per particle, 
     *3*: m3 per particle
  
@@ -349,29 +339,20 @@ Control how and where particles are seeded (INITRUNSEED)
 
 If seedType is 1:
 
- .. option:: ist1
+ .. option:: ist1, ist2, jst1, jst2
 
-    Lower / Southern boundary for seed area.
+    Lower-Southern / Upper-Northern /  Left-Western / Right-Eastern 
+    boundary for seed area. -1 indicates imt/jmt.
 
- .. option:: ist2
+ .. option:: kst1, kst2
 
-    Upper / Northern boundary for seed area. -1 indicates imt.
+    Deepest / Shallowest level to seed (0 at botton, km at surface)
 
- .. option:: jst1
+ .. option:: tst1, tst2
 
-    Left / Western boundary for seed area.
+    First and last timestep to seed particles. These variables 
+    override :option:`intspin` if set.
 
- .. option:: jst2
-
-    Right / Eastern boundary for seed area. -1 indicates jmt.
-
- .. option:: kst1
-
-    Deepest level to seed (0 at botton, km at surface)
-
- .. option:: kst2
-
-    Shallowest level to seed (0 at botton, km at surface)
 
 If seedType is 2 or 3:
 
@@ -390,6 +371,30 @@ If seedType is 2 or 3:
     This allows for the use of different seed files at different 
     start points.
 
+ .. option:: seedTime 
+
+    Sets whether seed time is an interval read in run.in namelist
+    of from a text file. 
+
+ .. option:: seedAll 
+
+    Sets whether each seed time in the text file is for just one 
+    particle or all of them. 
+
+ .. option:: seedPos 
+
+    Decides how positions in the seed file are intepreted::
+
+      1 = Values (integers) in the seed file indicate grid cells 
+          that are to be seeded. The amount of particels  is 
+           controlled by :option:`mqua`. 
+
+      2 = Values (floats) in the seed file indicate the exact 
+          positions in model coordinates for where to seed particles.
+          :option:`mqua` has no function.
+
+Options to only seed a subset of particles:
+
  .. option:: seedparts
 
     Split up the seeded area in **seedparts** chunks and seed only 
@@ -402,9 +407,11 @@ If seedType is 2 or 3:
     commandline in a script.
 
 
-Killzones for particles (INITRUNEND)
-------------------------------------
-This functionality allows to defines zones where all particles are
+Killzones for particles
+-----------------------
+*INIT_KILLZONES*
+
+This functionality allows to define zones where all particles are
 killed. Each zone is defined by ienw(n), iene(n), jens(n), jenn(n)
 where n is the zone id. For example::
 
@@ -415,10 +422,9 @@ where n is the zone id. For example::
 
 Will kill all particles that enter the rectangle i=5-6 and j=0-200.
 
- .. option:: LBT
+ .. option:: nend
 
     Number of killzones to use
-
 
  .. option:: jens(n)
 
@@ -442,8 +448,9 @@ Will kill all particles that enter the rectangle i=5-6 and j=0-200.
 
 
 
-Controll trajectories by salt and temp (INITRUNTEMPSALT)
---------------------------------------------------------
+Salt, temp or dens seed and kill particles
+------------------------------------------
+*INIT_TEMP_SALT*
 
 This functionality is only available only when TRACMASS is compiled
 with the option *tempsalt*.
@@ -464,6 +471,43 @@ with the option *tempsalt*.
 
     Max temperature/salinity/density before killing particle.
 
+
+Special functions
+-----------------
+
+*INIT_DIFFUSION*
+
+ .. option:: ah
+
+    Horizontal diffusion in m2/s
+
+ .. option:: av
+
+    Vertical diffusion in m2/s
+
+*INIT_DIFFUSION*
+
+ .. option:: critvel
+
+    Critical velocity for sedimentation
+
+ .. option:: cwamp
+
+    Constant for approximating wave amplitude, a = cwamp*U(surface)
+
+ .. option:: twave
+
+    Approximative peak period. Average 4s for Baltic proper
+
+ .. option:: partdiam
+    
+    Particle diameter for sedimentation (mm) 
+    clay 0.0005-0.002, silt 0.002-0.06, fine sand 0.06-0.2,
+    medium sand 0.2-0.6, coarse sand 0.6-2, gravel>2
+
+ .. option:: rho
+
+    Density of quartz particle: 2600-2650 g/cm^3, mean value 2620
 
 
 

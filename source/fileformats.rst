@@ -1,61 +1,38 @@
 
-Saving particle postions
-========================
+Where and when to seed particles
+================================
 
-TRACMASS can save calculated particle postion at different frequencies. This timing and the location of files is controlled by the case namelist (:ref:`INITRUNWRITE`). The resulting output files can also have different formats, which is selectes in each project's Makefile.prj file (:ref:`makeoutput`). They all save the same type of data:
 
-**ntrac,niter,x1,y1,z1,tt,t0,subvol,temp,salt,dens**
-where
-
-:ntrac:      Trajectory number
-:niter:      TRACMASS code iteration (only important for TRACMASS modellers)
-:x1:         Zoonal position of the trajectory particle
-:y1:         Meridional position of the trajectory particle
-:z1:         Vertical position of the trajectory particle
-:tt:         Time of the trajectory particle (in days)
-:t0:         Initial time of the trajectory particle
-:subvol:     The "volume" transport in m3/s of the trajectory
-
-The following columns are added if tempsalt is selected:
-
-:temp:       Temperature of the trajectory particle
-:salt:       Salinity/specific humidity of the trajectory particle
-:dens:       Density of the trajectory particle
+The seeding of particles in TRACMASS can be controlled in two 
+different ways. 1) By defining a region of grid cells and time steps
+(variables ist1, ist2, jst1, jst2, kst1, kst2, tst1, tst2), e.g. seed
+particles every time step during one year at 30S latitude line. 
 
 
 
-Ascii (fortran) format
-----------------------
-This is a native fortran text format where each column is right aligned. Best used when the data is postprocessed by other fortran softwares (e.g. Kristofers stuff). Each file is very large and take a long time to read. example::
+2) Simulate surface drifters by seeding at given positions and times, e.g. one particle at (x,y) at 15m depth at 2 Jan 1992 at 6am. 
+Then there are a number of combinations of the above, e.g. define a list of grid boxes along a coastline and seed every 4th time step. 
 
+I introduced four variables to TRACMASS to handle at least a few different kinds of seeding. 
+This was done when simulating surface drifters in the Baltic, so some of these options may only be available for RCO or BaltiX data and the rco_run.in provides some description of the set up. 
 
-CSV (Comma-separated values) format
------------------------------------
-CSV files are great if you want to look at small datasets quickly. Works well with python, R,  and matlab. Pretty safe when transferring data between computers with different processor architecture and for longterm storage. CSV files are also very large and slow to be processed. Avoid this format if you have large datasets. Example of a file::
+seedPos sets whether seed positions is an interval read in the run.in namelist or from a text file. 
+seedTime sets whether seed time is an interval read in run.in namelist of from a text file. 
+seedAll sets whether each seed time in the text file is for just one particle or all of them. 
+seedType sets whether the seed positions in the text file is grid box indices (integers) or exact positions in model coordinates (floats). 
 
-  1,27.00000,9.12500,49.12500,4.50000
-  1,27.00000,9.13220,49.12500,4.50000
-  1,27.00000,9.13940,49.12500,4.50000
-  1,27.00000,9.14660,49.12499,4.50000
+So seeding as in example 1) above would be done by setting seedPos = 1 and seedTime = 1.
+Seeding three surface drifters at different positions and time would
+be done by seedPos = 2, seedTime = 2, seedAll = 1, seedType = 1 and
+the seed text file would look like::
 
+      177       137        38     4     0  1962071500
+      165       143        38     4     0  1962072518
+      174       149        38     4     0  1962080506
 
-Binary format
-------------- 
-The most efficient file format to use is binary. These files are not directly readble and need to be imported using either numpy or matlab. They are also endian depended, which means that data genreated on one computer might not be directly readable on a computer of a different architecture. 
+The first three columns are i,j,k indices for the grid box in which to seed the drifter, the fourth column is isec = 4 (seed in center of grid box) and the fifth column is idir = 0 (allow particle to travel in any direction). The sixth column are the times in year-month-day-hour format which must coincide with model time steps (in this case 6 hours). 
+If seedAll = 2 all three particles above would be seeded each time step so that we would get nine seeds instead of three. 
 
-We don't provide the capacity to save to netcdf since this format are less optimal for his usage. The best self contained format to us would be HDF which we  plan to support in the future. 
+So you might be able to set up a list of grid boxes in a text file and seed them all for time steps also given in a text file (seedPos = 2, seedTime = 2, seedAll = 2, seedType = 1). 
 
-
-Filenames
----------
-
-Each run generates the following files
-
-:casename_ini.ext: Where and when particles are seeded
-:casename_kll.ext: Where and when particles are killed
-:casename_out.ext: Where and when particles leave the domain
-:casename_run.ext: All particle trajectories.
-
-Where *ext* is either asc, csv, or bin depending on format.
-
-It is the run-file that you normally want for postprocessing, the others are mainly for diagnostics. The filename might also include a time value and information about chunks if very large runs are split (see XXX).
+This kind of seeding might leave TRACMASS to be running although the time is not yet right to seed any particles. So if seedTime = 2 TRACMASS will run until some trajectories have been seeded and ended, while in all other cases TRACMASS stops whenever the number of active trajectories is 0. 
