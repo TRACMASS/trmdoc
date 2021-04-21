@@ -1,4 +1,14 @@
-TRACMASS Documentation.
+DEPRECATED
+==========
+
+.. image:: http://unmaintained.tech/badge.svg
+  :target: http://unmaintained.tech
+  :alt: No Maintenance Intended
+
+This repository will not be updated. This repository will be kept available in read-only mode. The latest version of TRACMASS documentation can be found at https://www.tracmass.org/docs
+
+TRACMASS Documentation (version 6).
+-----------------------------------
 
 The documentation is compiled by Sphinx (http://sphinx-doc.org), a python package developed to auto-generate documentation for software projects. We use a number of add-ons that needs to be installed as well. 
 
